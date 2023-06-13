@@ -54,7 +54,12 @@ class Product:
         # self.product = {}
         # self.product[self.name]["Price"] = self.price
         # "self.product[self.name]["Quantity"] = self.quantity
-        product = f"{self.name}, Price:{self.price}, Quantity:{self.quantity}"
+        if self.promotion:
+
+            product = f"{self.name}, Price:{self.price}, Quantity:{self.quantity}, Promotion:{self.promotion.name} "
+        else:
+            product = f"{self.name}, Price:{self.price}, Quantity:{self.quantity} "
+
         return product
 
     def get_promotion(self):
@@ -72,7 +77,7 @@ class Product:
 
         if self.promotion:
           #  price1=  self.promotion.apply_promotion()
-            return self.promotion.apply_promotion()
+            return self.promotion.apply_promotion(self.show(), self.quantity)
 
         self.total_price = buy_quantity * self.price
         self.quantity -= buy_quantity
