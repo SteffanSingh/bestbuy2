@@ -1,11 +1,13 @@
 import re
 from typing import Dict, List
+from promotions import Promotion
 
 
 class Product:
     def __init__(self, name: str, price: float, quantity: int, active: bool = True):
 
         """constructor to initialize the all instance variables : """
+        self.promotion = None
         pattern = r'[^\w\s]'
         match = re.search(pattern, name)
         if name == " ":
@@ -25,7 +27,7 @@ class Product:
             print(error)
 
     def __repr__(self) -> str:
-        return "{"+ self.name + ", Price=$" + str(self.price)+", Quantity="+str(self.quantity)+"}"
+        return "{" + self.name + ", Price=$" + str(self.price) + ", Quantity=" + str(self.quantity) + "}"
 
     def get_quantity(self) -> float:
         return self.quantity
@@ -55,9 +57,68 @@ class Product:
         product = f"{self.name}, Price:{self.price}, Quantity:{self.quantity}"
         return product
 
+    def get_promotion(self):
+        return self.promotion
+
+    def set_promotion(self,promotion):
+        self.promotion = promotion
+        return self.promotion
+
     def buy(self, buy_quantity) -> float:
         if buy_quantity < 0:
             raise Exception("The quantity cant be less than 0")
+        if buy_quantity > self.quantity:
+            raise Exception("The quantity is too large")
+
+        if self.promotion:
+          #  price1=  self.promotion.apply_promotion()
+            return self.promotion.apply_promotion()
+
         self.total_price = buy_quantity * self.price
         self.quantity -= buy_quantity
+
         return self.total_price
+
+
+class NonStockedProduct(Product):
+    def __init__(self, name, price):
+        super().__init__(name, price,quantity=0)
+        self.quantity = 0
+
+    def show(self) -> str:
+        product = f"{self.name}, Price:{self.price}"
+        return product
+
+    def order(self):
+        total_amount = self.price
+
+        return total_amount
+
+
+class LimitedProduct(Product):
+    def __init__(self, name, price, quantity, maximum):
+        super().__init__(name, price, quantity)
+        self.maximum = maximum
+
+    def show(self) -> str:
+        product = f"{self.name}, Price:{self.price}, Quantity:{self.quantity} Maximum:{self.maximum}"
+        return product
+
+    def order(self, buy_quantity):
+        if buy_quantity < 0:
+            raise Exception("The quantity cant be less than 0")
+        if buy_quantity > self.quantity:
+            raise Exception("The quantity is too large")
+        if buy_quantity > self.maximum:
+            raise Exception(f"Please enter the quantity lesser than {self.maximum} ")
+        elif buy_quantity <= self.quantity and buy_quantity <= self.maximum:
+            total_amount = buy_quantity * self.price
+            self.quantity -= buy_quantity
+            self.maximum -= 1
+            return total_amount
+
+
+
+
+
+
