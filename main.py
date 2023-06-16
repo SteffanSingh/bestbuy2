@@ -50,9 +50,6 @@ def order_product(product_list1, object1):
         product_no = input("Which product # do you want ? ")
 
 
-        while int(product_no) < 0:
-
-            product_no = input("please enter the positive value,Which product # do you want ? ")
 
         try:
 
@@ -92,6 +89,7 @@ def order_product(product_list1, object1):
                         product1.quantity -= int(product_quant)
                         print("product is added to list\n")
                         break
+
         except ValueError as e:
             print("Please enter a valid input: ")
 
