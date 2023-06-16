@@ -77,7 +77,8 @@ class Product:
 
         if self.promotion:
           #  price1=  self.promotion.apply_promotion()
-            return self.promotion.apply_promotion(self.show(), self.quantity)
+
+            return self.promotion.apply_promotion(self, buy_quantity)
 
         self.total_price = buy_quantity * self.price
         self.quantity -= buy_quantity
@@ -88,16 +89,19 @@ class Product:
 class NonStockedProduct(Product):
     def __init__(self, name, price):
         super().__init__(name, price,quantity=0)
-        self.quantity = 0
+
+    def __repr__(self) -> str:
+        return "{" + self.name + ", Price=$" + str(self.price) + ""
 
     def show(self) -> str:
         product = f"{self.name}, Price:{self.price}"
         return product
 
-    def order(self):
-        total_amount = self.price
+    def buy(self, buy_quantity=0):
+        if self.promotion:
+            #  price1=  self.promotion.apply_promotion()
 
-        return total_amount
+            return self.promotion.apply_promotion(self, buy_quantity)
 
 
 class LimitedProduct(Product):
@@ -105,22 +109,22 @@ class LimitedProduct(Product):
         super().__init__(name, price, quantity)
         self.maximum = maximum
 
+    def __repr__(self) -> str:
+        return "{" + self.name + ", Price=$" + str(self.price) + ", Quantity=" + str(self.quantity) + "" + ""
+
     def show(self) -> str:
         product = f"{self.name}, Price:{self.price}, Quantity:{self.quantity} Maximum:{self.maximum}"
         return product
 
-    def order(self, buy_quantity):
-        if buy_quantity < 0:
-            raise Exception("The quantity cant be less than 0")
-        if buy_quantity > self.quantity:
-            raise Exception("The quantity is too large")
-        if buy_quantity > self.maximum:
-            raise Exception(f"Please enter the quantity lesser than {self.maximum} ")
-        elif buy_quantity <= self.quantity and buy_quantity <= self.maximum:
-            total_amount = buy_quantity * self.price
-            self.quantity -= buy_quantity
-            self.maximum -= 1
-            return total_amount
+    def buy(self, buy_quantity):
+
+
+
+
+        total_amount = buy_quantity * self.price
+        self.quantity -= buy_quantity
+        self.maximum -= 1
+        return total_amount
 
 
 

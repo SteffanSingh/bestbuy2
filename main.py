@@ -30,11 +30,12 @@ def start(store):
                 total_order = store.order(order_list)
 
                 print(f"order made: $ {total_order}")
-            except Exception as error:
-                print(error, "Please enter the correct value:")
+            except ValueError:
+                 print("Please enter the correct input:")
 
         elif command == "4":
             return True
+
         else:
             print("Please enter the correct command:")
 
@@ -48,40 +49,53 @@ def order_product(product_list1, object1):
 
         product_no = input("Which product # do you want ? ")
 
-        if not product_no:
-            break
-        product_quantity = product_list1[int(product_no) - 1].quantity
 
-        product1 = product_list1[int(product_no) - 1]
-        while True:
-            if product1.name == "Windows License":
-                product_quant = 1
-            else:
+        while int(product_no) < 0:
+
+            product_no = input("please enter the positive value,Which product # do you want ? ")
+
+        try:
+
+
+            if not product_no:
+                break
+            product_quantity = product_list1[int(product_no) - 1].quantity
+
+            product1 = product_list1[int(product_no) - 1]
+            while True:
+
                 product_quant = input("What amount do you want ?")
+                while int(product_quant) < 0:
+                    product_quant = input("Please enter the valid quantity in positive integer:  ")
 
-            if 0 < product_quantity < int(product_quant):
-                print(f"We have only {product_quantity} in stock.  ")
-                break
-
-            elif product_quantity == 0 and product1.name != "Windows License":
-                print("The product is out of stock:")
-                break
-
-            elif product1.name == "Shipping" and int(product_quant) > 1:
-                print(" Shipping cant be more than 1")
-                break
-
-
-            elif product1.quantity >= int(product_quant)> 0 or product1.name == "Windows License" :
-                if product1.name == "Shipping" and (product1, 1) in order_list:
-                    print("Shipping can be added only once")
+                if 0 < product_quantity < int(product_quant):
+                    print(f"We have only {product_quantity} in stock.  ")
                     break
-                else:
-                    order_value = (product1, int(product_quant))
-                    order_list.append(order_value)
-                    product1.quantity -= int(product_quant)
-                    print("product is added to list\n")
+
+                elif product_quantity == 0 and product1.name != "Windows License":
+                    print("The product is out of stock:")
                     break
+
+                elif product1.name == "Shipping" and int(product_quant) > 1:
+                    print(" Shipping cant be more than 1")
+                    break
+
+
+                elif product1.quantity >= int(product_quant) > 0 or product1.name == "Windows License":
+                    if product1.name == "Shipping" and (product1, 1) in order_list:
+                        print("Shipping can be added only once")
+                        break
+                    else:
+                        order_value = (product1, int(product_quant))
+                        order_list.append(order_value)
+
+                        product1.quantity -= int(product_quant)
+                        print("product is added to list\n")
+                        break
+        except ValueError as e:
+            print("Please enter a valid input: ")
+
+
     return order_list
 
 
@@ -100,8 +114,13 @@ if __name__ == "__main__":
 
     # Add promotions to products
     product_list[0].set_promotion(second_half_price)
+
     product_list[1].set_promotion(third_one_free)
+
+
     product_list[3].set_promotion(thirty_percent)
+
+
 
     best_buy = store.Store(product_list)
     start(best_buy)
