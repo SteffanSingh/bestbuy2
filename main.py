@@ -3,6 +3,7 @@ import products
 import store
 import promotions
 
+
 # ***Hey this is Kapoor file
 
 def start(store):
@@ -22,7 +23,7 @@ def start(store):
                 product_list1 = store.get_all_products()
 
                 for product in product_list1:
-                    if product.name== "Windows License":
+                    if product.name == "Windows License":
                         product.quantity = 0
                     print(f"{count + 1}. {product.show()}")
                     count += 1
@@ -31,7 +32,7 @@ def start(store):
 
                 print(f"order made: $ {total_order}")
             except ValueError:
-                 print("Please enter the correct input:")
+                print("Please enter the correct input:")
 
         elif command == "4":
             return True
@@ -47,15 +48,18 @@ def order_product(product_list1, object1):
 
     while True:
 
-        product_no = input("Which product # do you want ? ")
-
-
-
         try:
+            product_no = input("Which product # do you want ? ")
+
+
 
 
             if not product_no:
                 break
+            while int(product_no) > len(product_list1):
+                print(f"There are only  {len(product_list1)} products. ")
+                print(f"Enter the value less than {len(product_list1)}\n***")
+                product_no = input(f"""Which product # do you want ? """)
             product_quantity = product_list1[int(product_no) - 1].quantity
 
             product1 = product_list1[int(product_no) - 1]
@@ -93,7 +97,6 @@ def order_product(product_list1, object1):
         except ValueError as e:
             print("Please enter a valid input: ")
 
-
     return order_list
 
 
@@ -115,10 +118,7 @@ if __name__ == "__main__":
 
     product_list[1].set_promotion(third_one_free)
 
-
     product_list[3].set_promotion(thirty_percent)
-
-
 
     best_buy = store.Store(product_list)
     start(best_buy)
