@@ -26,7 +26,7 @@ class Store():
     def order(self, shopping_list) -> float:
         total_price = 0
         for product,quant in shopping_list:
-            print(product.buy(quant))
+            #print(product.buy(quant))
             total_price += product.buy(quant)
         print(shopping_list)
         return total_price

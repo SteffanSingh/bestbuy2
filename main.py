@@ -90,7 +90,7 @@ def order_product(product_list1, object1):
                         order_value = (product1, int(product_quant))
                         order_list.append(order_value)
 
-                        product1.quantity -= int(product_quant)
+                        #product1.quantity -= int(product_quant)
                         print("product is added to list\n")
                         break
 

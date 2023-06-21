@@ -70,20 +70,27 @@ class Product:
         return self.promotion
 
     def buy(self, buy_quantity) -> float:
-        if buy_quantity < 0:
-            raise Exception("The quantity cant be less than 0")
-        if buy_quantity > self.quantity:
-            raise Exception("The quantity is too large")
 
-        if self.promotion:
-          #  price1=  self.promotion.apply_promotion()
+        try:
+            if buy_quantity < 0:
+                raise Exception("The quantity cant be less than 0")
+            if buy_quantity > self.quantity:
+                raise Exception("The quantity is too large")
 
-            return self.promotion.apply_promotion(self, buy_quantity)
+            if self.promotion:
+                #  price1=  self.promotion.apply_promotion()
 
-        self.total_price = buy_quantity * self.price
-        self.quantity -= buy_quantity
+                self.total_price= self.promotion.apply_promotion(self, buy_quantity)
+            else:
 
-        return self.total_price
+                self.total_price = buy_quantity * self.price
+
+            self.quantity -= buy_quantity
+            return self.total_price
+
+        except Exception as e:
+            print(e)
+
 
 
 class NonStockedProduct(Product):
